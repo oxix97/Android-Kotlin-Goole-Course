@@ -1,7 +1,11 @@
 package com.example.tiptime
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import com.example.tiptime.databinding.ActivityMainBinding
 import java.text.NumberFormat
 
@@ -13,6 +17,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.btnMainCalculate.setOnClickListener {
             calculateTip()
+        }
+        binding.etMainCostText.setOnKeyListener { view, keyCode, _ ->
+            handleKeyEvent(view, keyCode)
         }
     }
 
@@ -31,5 +38,15 @@ class MainActivity : AppCompatActivity() {
         if (isRoundUp) tip = kotlin.math.ceil(tip)
         val formatTip = NumberFormat.getCurrencyInstance().format(tip)
         binding.tvMainTipResult.text = formatTip
+    }
+
+    private fun handleKeyEvent(view: View, keyCode: Int): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+            return true
+        }
+        return false
     }
 }
