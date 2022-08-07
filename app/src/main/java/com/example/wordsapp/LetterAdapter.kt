@@ -15,6 +15,7 @@
  */
 package com.example.wordsapp
 
+import android.content.Intent
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -49,8 +50,8 @@ class LetterAdapter :
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LetterViewHolder {
         val layout = LayoutInflater
-                .from(parent.context)
-                .inflate(R.layout.item_view, parent, false)
+            .from(parent.context)
+            .inflate(R.layout.item_view, parent, false)
         // Setup custom accessibility delegate to set the text read
         layout.accessibilityDelegate = Accessibility
         return LetterViewHolder(layout)
@@ -61,7 +62,15 @@ class LetterAdapter :
      */
     override fun onBindViewHolder(holder: LetterViewHolder, position: Int) {
         val item = list.get(position)
-        holder.button.text = item.toString()
+        with(holder) {
+            button.text = item.toString()
+            button.setOnClickListener {
+                Intent(view.context, DetailActivity::class.java).apply {
+                    putExtra(DetailActivity.ID, button.text.toString())
+                    view.context.startActivity(this)
+                }
+            }
+        }
     }
 
     // Setup custom accessibility delegate to set the text read with
